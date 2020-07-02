@@ -1,0 +1,38 @@
+version: "3.1"
+services:
+  database:
+    image: mariadb:10.1
+    container_name: conduit-mariadb
+    environment:
+      - MYSQL_ROOT_PASSWORD=password
+      - MYSQL_DATABASE=conduit
+      - MYSQL_USER=conduit
+      - MYSQL_PASSWORD=password
+    ports:
+      - "8083:3306"
+    volumes:
+      - ./schema.sql:/docker-entrypoint-initdb.d/schema.sql:ro
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: conduit-phpmyadmin
+    environment:
+      - MYSQL_ROOT_PASSWORD=password
+      - MYSQL_DATABASE=conduit
+      - MYSQL_USER=conduit
+      - MYSQL_PASSWORD=password
+    links:
+      - "database:db"
+    ports:
+      - "8081:80"
+
+  web:
+    # image: fauria/lap
+    image: stucky/php7-apache-pdo
+    container_name: conduit-web
+    volumes:
+      - .:/var/www/html
+    ports:
+      - "8080:80"
+    depends_on:
+      - database

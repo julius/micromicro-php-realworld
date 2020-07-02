@@ -1,0 +1,21 @@
+RewriteEngine on
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+
+# /article/some-title-1234 => article.php
+RewriteRule ^article/(.*)$ /article.php [NC,L,QSA]
+
+# /editor/some-title-1234 => editor.php
+RewriteRule ^editor/(.*)$ /editor.php [NC,L,QSA]
+
+# /@user => profile.php
+RewriteRule ^@(.*)$ /profile.php [NC,L,QSA]
+
+# /some-path => some-path.php
+RewriteRule ^([^\.]+)$ $1.php [NC,L,QSA]
+
+# Forbidden
+RewriteRule ^schema.sql$ - [F,L] 
+RewriteRule ^_(.*).php$ - [F,L] 
+RewriteRule ^docker-compose.yml$ - [F,L] 
+RewriteRule ^NOTES.md$ - [F,L] 
